@@ -2,14 +2,17 @@
 
 /**
  * One-key bootstrap: provisions a vault + agent using the human's API key
- * via the 1claw CLI, writes agent-scoped credentials to CLI config,
- * then discards the human key.
+ * via the 1claw CLI, then writes agent-scoped credentials to both the
+ * OpenClaw config (for the plugin) and 1claw CLI config (for CLI usage).
  *
  * Runs once during `scripts.build` in manifest.json.
- * Uses only the CLI (no SDK import) to avoid ESM resolution issues.
+ * The human API key (ONECLAW_HUMAN_API_KEY) is never stored in the config.
  */
 
 import { execSync } from "node:child_process";
+import { readFileSync, writeFileSync, existsSync } from "node:fs";
+import { join } from "node:path";
+import { homedir } from "node:os";
 
 const HUMAN_KEY = process.env.ONECLAW_HUMAN_API_KEY;
 
@@ -35,6 +38,36 @@ function cliJson(cmd) {
   return JSON.parse(raw);
 }
 
+function updateOpenClawConfig(agentId, agentApiKey, vaultId) {
+  const configPath = join(homedir(), ".openclaw", "openclaw.json");
+  let config = {};
+
+  if (existsSync(configPath)) {
+    try {
+      config = JSON.parse(readFileSync(configPath, "utf-8"));
+    } catch {
+      console.log("   ⚠ Could not parse existing openclaw.json, creating fresh plugin config");
+    }
+  }
+
+  if (!config.plugins) config.plugins = {};
+  if (!config.plugins.entries) config.plugins.entries = {};
+
+  config.plugins.entries["1claw"] = {
+    ...config.plugins.entries["1claw"],
+    enabled: true,
+    config: {
+      ...(config.plugins.entries["1claw"]?.config || {}),
+      apiKey: agentApiKey,
+      agentId: agentId,
+      vaultId: vaultId,
+    },
+  };
+
+  writeFileSync(configPath, JSON.stringify(config, null, 2) + "\n");
+  console.log(`   Wrote plugin config to ${configPath}`);
+}
+
 async function main() {
   console.log("\n🔐 1claw bootstrap: provisioning vault + agent...\n");
 
@@ -48,7 +81,7 @@ async function main() {
       console.log(`   Using existing vault: ${vaultId}`);
     }
   } catch {
-    // No vaults yet — will create one below
+    // No vaults yet
   }
 
   if (!vaultId) {
@@ -62,11 +95,11 @@ async function main() {
     }
   }
 
-  // --- Link vault as default ---
+  // --- Link vault as default for CLI ---
   try {
     cli(`1claw vault link ${vaultId}`);
   } catch {
-    // Non-fatal — config set below will handle it
+    // Non-fatal
   }
 
   // --- Agent ---
@@ -92,25 +125,27 @@ async function main() {
     process.exit(1);
   }
 
-  // --- Write agent credentials to CLI config ---
+  // --- Write to OpenClaw config (plugin reads from here) ---
+  try {
+    updateOpenClawConfig(agentId, agentApiKey, vaultId);
+  } catch (err) {
+    console.error("Failed to update OpenClaw config:", err.message);
+  }
+
+  // --- Also write to 1claw CLI config ---
   try {
     cli(`1claw config set agent-id ${agentId}`);
     cli(`1claw config set agent-api-key ${agentApiKey}`);
     cli(`1claw config set default-vault ${vaultId}`);
-    console.log("   Wrote credentials to ~/.config/1claw/\n");
+    console.log("   Wrote credentials to ~/.config/1claw/");
   } catch {
-    console.log(
-      "   ⚠ Could not write to CLI config. Set these env vars manually:",
-    );
-    console.log(`     ONECLAW_AGENT_ID=${agentId}`);
-    console.log(`     ONECLAW_AGENT_API_KEY=${agentApiKey}`);
-    console.log(`     ONECLAW_VAULT_ID=${vaultId}\n`);
+    // Non-fatal — OpenClaw config is the primary target
   }
 
   // --- Discard human key from this process ---
   delete process.env.ONECLAW_HUMAN_API_KEY;
 
-  console.log("✅ Bootstrap complete!\n");
+  console.log("\n✅ Bootstrap complete!\n");
   console.log("   Vault ID:     ", vaultId);
   console.log("   Agent ID:     ", agentId);
   console.log("   Agent API Key:", agentApiKey.slice(0, 8) + "...");
