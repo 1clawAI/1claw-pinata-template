@@ -1,0 +1,53 @@
+{
+    "version": 1,
+    "agent": {
+        "name": "1claw agent",
+        "description": "OpenClaw workspace for HSM-backed secret management, LLM traffic inspection via Shroud, and on-chain transaction signing via the Intents API — powered by 1claw.",
+        "vibe": "security-first, zero-trust, ships with the 1claw skill",
+        "emoji": "🔐"
+    },
+    "template": {
+        "slug": "1claw",
+        "category": "security",
+        "tags": [
+            "1claw",
+            "openclaw",
+            "secrets",
+            "vault",
+            "hsm",
+            "mcp",
+            "shroud",
+            "intents-api",
+            "ai-agents",
+            "zero-trust"
+        ],
+        "authorName": "1claw",
+        "authorUrl": "https://1claw.xyz",
+        "authorLogoUrl": "https://1claw.xyz/logo.svg"
+    },
+    "secrets": [
+        {
+            "name": "ONECLAW_AGENT_ID",
+            "description": "Agent UUID from the 1claw dashboard (Agents → your agent → ID)"
+        },
+        {
+            "name": "ONECLAW_AGENT_API_KEY",
+            "description": "Agent API key (ocv_...) — shown once when you create the agent"
+        },
+        {
+            "name": "ONECLAW_VAULT_ID",
+            "description": "Vault UUID (Vaults → your vault → ID)"
+        }
+    ],
+    "scripts": {
+        "build": "npm install -g @1claw/cli@0.13.0 && openclaw plugins install @1claw/openclaw-plugin@0.2.0"
+    },
+    "tasks": [
+        {
+            "name": "1claw-vault-status",
+            "prompt": "Run `1claw whoami` and `1claw vault list` then reply with one line: READY with vault count, or NOT CONFIGURED with the error hint. Do not paste secrets.",
+            "schedule": "0 9 * * *",
+            "enabled": false
+        }
+    ]
+}
