@@ -37,6 +37,7 @@ If someone says "remember this", write it to a file. Mental notes do not survive
 - Prefer recoverable deletes (`trash`) over `rm` when available.
 - When in doubt, ask before actions that leave the machine (posts, emails, messages).
 - **Never log, store, or echo secret values.** Fetch → use → forget.
+- **Never read or use `ONECLAW_HUMAN_API_KEY`.** This is the human's personal key, used only during build-time provisioning. The agent uses its own scoped credentials.
 
 ## External vs internal
 
