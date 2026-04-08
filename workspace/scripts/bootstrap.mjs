@@ -1,15 +1,14 @@
 #!/usr/bin/env node
 
 /**
- * One-key bootstrap: provisions a vault + agent using the human's API key,
- * writes agent-scoped credentials to CLI config, then discards the human key.
+ * One-key bootstrap: provisions a vault + agent using the human's API key
+ * via the 1claw CLI, writes agent-scoped credentials to CLI config,
+ * then discards the human key.
  *
  * Runs once during `scripts.build` in manifest.json.
- * The human API key (ONECLAW_HUMAN_API_KEY) is never stored or accessible
- * to the agent after this script completes.
+ * Uses only the CLI (no SDK import) to avoid ESM resolution issues.
  */
 
-import { createClient } from "@1claw/sdk";
 import { execSync } from "node:child_process";
 
 const HUMAN_KEY = process.env.ONECLAW_HUMAN_API_KEY;
@@ -24,68 +23,85 @@ if (!HUMAN_KEY) {
   process.exit(0);
 }
 
-const BASE_URL = process.env.ONECLAW_BASE_URL || "https://api.1claw.xyz";
+function cli(cmd) {
+  return execSync(cmd, {
+    encoding: "utf-8",
+    env: { ...process.env, ONECLAW_API_KEY: HUMAN_KEY },
+  }).trim();
+}
+
+function cliJson(cmd) {
+  const raw = cli(`${cmd} --json`);
+  return JSON.parse(raw);
+}
 
 async function main() {
   console.log("\n🔐 1claw bootstrap: provisioning vault + agent...\n");
 
-  const client = createClient({ baseUrl: BASE_URL, apiKey: HUMAN_KEY });
-
   // --- Vault ---
   let vaultId;
-  const vaults = await client.vault.list();
-  if (vaults.error) {
-    console.error("Failed to list vaults:", vaults.error.message);
-    process.exit(1);
+  try {
+    const vaults = cliJson("1claw vault list");
+    const list = vaults.vaults || vaults;
+    if (Array.isArray(list) && list.length > 0) {
+      vaultId = list[0].id;
+      console.log(`   Using existing vault: ${vaultId}`);
+    }
+  } catch {
+    // No vaults yet — will create one below
   }
 
-  if (vaults.data?.vaults?.length) {
-    vaultId = vaults.data.vaults[0].id;
-    console.log(`   Using existing vault: ${vaultId}`);
-  } else {
-    const created = await client.vault.create({ name: "openclaw-vault" });
-    if (created.error) {
-      console.error("Failed to create vault:", created.error.message);
+  if (!vaultId) {
+    try {
+      const created = cliJson("1claw vault create openclaw-vault");
+      vaultId = created.id || created.vault?.id;
+      console.log(`   Created vault: ${vaultId}`);
+    } catch (err) {
+      console.error("Failed to create vault:", err.message);
       process.exit(1);
     }
-    vaultId = created.data.id;
-    console.log(`   Created vault: ${vaultId}`);
+  }
+
+  // --- Link vault as default ---
+  try {
+    cli(`1claw vault link ${vaultId}`);
+  } catch {
+    // Non-fatal — config set below will handle it
   }
 
   // --- Agent ---
-  const agent = await client.agents.create({
-    name: "openclaw-agent",
-    scopes: ["vault:read"],
-  });
-  if (agent.error) {
-    console.error("Failed to create agent:", agent.error.message);
+  let agentId, agentApiKey;
+  try {
+    const agent = cliJson("1claw agent create openclaw-agent");
+    agentId = agent.id || agent.agent?.id;
+    agentApiKey = agent.api_key || agent.apiKey;
+    console.log(`   Created agent: ${agentId}`);
+  } catch (err) {
+    console.error("Failed to create agent:", err.message);
     process.exit(1);
   }
-
-  const agentId = agent.data.agent.id;
-  const agentApiKey = agent.data.api_key;
-  console.log(`   Created agent: ${agentId}`);
 
   // --- Grant read access ---
-  const grant = await client.access.grantAgent(vaultId, agentId, ["read"]);
-  if (grant.error) {
-    console.error("Failed to grant access:", grant.error.message);
+  try {
+    cli(
+      `1claw policy create --principal-type agent --principal-id ${agentId} --path "*" --permissions read`,
+    );
+    console.log("   Granted agent read access to vault");
+  } catch (err) {
+    console.error("Failed to grant access:", err.message);
     process.exit(1);
   }
-  console.log("   Granted agent read access to vault");
 
-  // --- Write to CLI config ---
-  const cliSet = (key, value) =>
-    execSync(`1claw config set ${key} "${value}"`, { stdio: "pipe" });
-
+  // --- Write agent credentials to CLI config ---
   try {
-    cliSet("agent-id", agentId);
-    cliSet("agent-api-key", agentApiKey);
-    cliSet("default-vault", vaultId);
+    cli(`1claw config set agent-id ${agentId}`);
+    cli(`1claw config set agent-api-key ${agentApiKey}`);
+    cli(`1claw config set default-vault ${vaultId}`);
     console.log("   Wrote credentials to ~/.config/1claw/\n");
   } catch {
-    console.log("   ⚠ Could not write to CLI config (1claw CLI may not be on PATH).");
-    console.log("   Set these env vars manually:");
+    console.log(
+      "   ⚠ Could not write to CLI config. Set these env vars manually:",
+    );
     console.log(`     ONECLAW_AGENT_ID=${agentId}`);
     console.log(`     ONECLAW_AGENT_API_KEY=${agentApiKey}`);
     console.log(`     ONECLAW_VAULT_ID=${vaultId}\n`);
@@ -99,9 +115,15 @@ async function main() {
   console.log("   Agent ID:     ", agentId);
   console.log("   Agent API Key:", agentApiKey.slice(0, 8) + "...");
   console.log("");
-  console.log("🔑 SECURITY: You can now revoke or rotate your personal API key");
-  console.log("   (1ck_...) from https://1claw.xyz → Settings → API Keys.");
-  console.log("   The agent uses its own scoped credentials from here on.\n");
+  console.log(
+    "🔑 SECURITY: You can now revoke or rotate your personal API key",
+  );
+  console.log(
+    "   (1ck_...) from https://1claw.xyz → Settings → API Keys.",
+  );
+  console.log(
+    "   The agent uses its own scoped credentials from here on.\n",
+  );
 }
 
 main().catch((err) => {
