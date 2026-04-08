@@ -25,7 +25,7 @@
         "authorUrl": "https://1claw.xyz",
         "authorLogoUrl": "https://1claw.xyz/logo.svg"
     },
-    "secrets": [],
+    "secrets": ["ONECLAW_AGENT_API_KEY"],
     "scripts": {
         "build": "npm install -g @1claw/cli@0.13.0 && openclaw plugins install @1claw/openclaw-plugin@0.2.0"
     },

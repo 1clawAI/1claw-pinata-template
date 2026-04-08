@@ -168,9 +168,9 @@ Environment variables:
 
 | Variable | Required | Description |
 | -------- | -------- | ----------- |
-| `ONECLAW_AGENT_ID` | Yes | Agent UUID from the dashboard |
-| `ONECLAW_AGENT_API_KEY` | Yes | Agent API key (`ocv_...`) |
-| `ONECLAW_VAULT_ID` | Yes | UUID of the vault to operate on |
+| `ONECLAW_AGENT_API_KEY` | **Yes** | Agent API key (`ocv_...`) — agent ID and vault auto-discovered |
+| `ONECLAW_AGENT_ID` | No | Auto-resolved from key prefix; set to override |
+| `ONECLAW_VAULT_ID` | No | Auto-discovered from token exchange; set to override |
 | `ONECLAW_BASE_URL` | No | Default: `https://api.1claw.xyz` |
 | `ONECLAW_LOCAL_ONLY` | No | Set `true` for security-only mode (only `inspect_content`) |
 
@@ -228,7 +228,7 @@ The plugin registers 13 tools with the OpenClaw gateway under the `oneclaw_` pre
 }
 ```
 
-Environment fallback: `ONECLAW_AGENT_API_KEY`, `ONECLAW_AGENT_ID`, `ONECLAW_VAULT_ID`, `ONECLAW_BASE_URL`, `ONECLAW_SHROUD_URL`.
+Environment fallback: `ONECLAW_AGENT_API_KEY` (required; agent ID and vault auto-discovered), `ONECLAW_AGENT_ID` (optional override), `ONECLAW_VAULT_ID` (optional override), `ONECLAW_BASE_URL`, `ONECLAW_SHROUD_URL`.
 
 ### Slash commands
 
@@ -405,12 +405,12 @@ Environment variables to configure:
 1. Ask the human for their **1claw email** and a **name** for this agent.
 2. Run `/oneclaw-enroll <email> <agent-name>`.
 3. Tell the human to **check their email** and **approve** the enrollment.
-4. After approval, tell the human to add three env vars in their **Pinata agent Settings → Environment Variables**:
-   - `ONECLAW_AGENT_API_KEY` — the `ocv_...` key from the approval email
-   - `ONECLAW_AGENT_ID` — the agent UUID from the approval email
-   - `ONECLAW_VAULT_ID` — their vault UUID (from https://1claw.xyz → Vaults)
-5. Tell the human to **restart the agent** after setting the env vars.
+4. After approval, tell the human to set **one env var** in their **Pinata agent Settings → Environment Variables**:
+   - `ONECLAW_AGENT_API_KEY` — the `ocv_...` key from the approval page or email
+5. Tell the human to **restart the agent**.
 6. After restart, run `/oneclaw` to verify connection.
+
+Agent ID and vault are auto-discovered from the API key — no additional env vars needed.
 
 **Never ask the human to paste credentials into the chat.** Always direct them to set env vars via the Pinata dashboard or their hosting platform.
 
@@ -420,7 +420,7 @@ The human can also set up via the 1claw dashboard or CLI on their own machine:
 
 1. **Sign up** at https://1claw.xyz (Google SSO or email)
 2. **Create a vault** and **create an agent** via dashboard or `1claw vault create` / `1claw agent create`
-3. **Set the 3 env vars** (`ONECLAW_AGENT_API_KEY`, `ONECLAW_AGENT_ID`, `ONECLAW_VAULT_ID`) in Pinata Settings → Environment Variables
+3. **Set `ONECLAW_AGENT_API_KEY`** in Pinata Settings → Environment Variables (agent ID and vault auto-discovered)
 4. **Restart the agent**
 
 ### After enrollment

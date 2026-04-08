@@ -10,7 +10,7 @@ Create an account (Google or email) and create a vault.
 
 ### 2. Import this repo in Pinata Agents
 
-The build script installs `@1claw/cli` and `@1claw/openclaw-plugin` automatically. No secrets required at import time.
+Pinata will prompt for `ONECLAW_AGENT_API_KEY` during import. Leave it blank for now — you'll get the key in step 3.
 
 ### 3. Enroll the agent
 
@@ -20,21 +20,15 @@ After pairing, type in the chat:
 /oneclaw-enroll you@example.com my-agent
 ```
 
-Check your email and approve the enrollment.
+Check your email and approve the enrollment. The approval page (and a follow-up email) will show:
 
-### 4. Add credentials as env vars
+```
+ONECLAW_AGENT_API_KEY=ocv_...
+```
 
-In your **Pinata agent Settings → Environment Variables**, add:
+Paste that into your **Pinata agent Settings → Environment Variables** and restart. That's the only env var you need — agent ID and vault are auto-discovered from the key.
 
-| Variable | Value |
-| -------- | ----- |
-| `ONECLAW_AGENT_API_KEY` | `ocv_...` from the approval email |
-| `ONECLAW_AGENT_ID` | Agent UUID from the approval email |
-| `ONECLAW_VAULT_ID` | Vault UUID from [1claw.xyz](https://1claw.xyz) → Vaults |
-
-Restart the agent. Your personal API key never enters the agent's environment.
-
-### 5. Verify and store secrets
+### 4. Verify
 
 In the chat, type `/oneclaw` to verify connection. Then store secrets via CLI on your machine:
 
@@ -68,6 +62,14 @@ workspace/
   skills/1claw/SKILL.md    # Full 1claw skill reference
 ```
 
+## Environment variables
+
+| Variable | Required | Description |
+| -------- | -------- | ----------- |
+| `ONECLAW_AGENT_API_KEY` | **Yes** | Agent API key (`ocv_...`) from enrollment approval |
+| `ONECLAW_AGENT_ID` | No | Auto-discovered from the API key |
+| `ONECLAW_VAULT_ID` | No | Auto-discovered from the token exchange |
+
 ## Optional: Shroud & Intents API
 
 ```bash
@@ -84,9 +86,7 @@ workspace/
       "command": "npx",
       "args": ["-y", "@1claw/mcp"],
       "env": {
-        "ONECLAW_AGENT_ID": "<agent-uuid>",
-        "ONECLAW_AGENT_API_KEY": "<ocv_...>",
-        "ONECLAW_VAULT_ID": "<vault-uuid>"
+        "ONECLAW_AGENT_API_KEY": "<ocv_...>"
       }
     }
   }
