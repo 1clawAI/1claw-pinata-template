@@ -2,7 +2,7 @@
 
 > **Version:** 0.2.0
 > **Requires:** `bins: ["1claw"]`
-> **Packages:** `@1claw/cli@0.13.0` · `@1claw/sdk@0.17.0` · `@1claw/mcp@0.17.0` · `@1claw/openclaw-plugin@0.2.0`
+> **Packages:** `@1claw/cli@0.14.0` · `@1claw/sdk@0.18.0` · `@1claw/mcp@0.18.0` · `@1claw/openclaw-plugin@0.2.0`
 
 ## What 1claw does
 
