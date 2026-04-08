@@ -402,19 +402,32 @@ Environment variables to configure:
 
 ### Enrollment (first time)
 
-Type `/oneclaw-enroll` in the chat. The plugin creates a scoped agent under the human's 1claw account and writes credentials to the OpenClaw config. The human's personal API key never enters the agent's environment.
+1. Ask the human for their **1claw email** and a **name** for this agent.
+2. Run `/oneclaw-enroll <email> <agent-name>`.
+3. Tell the human to **check their email** and **approve** the enrollment.
+4. After approval, tell the human to add three env vars in their **Pinata agent Settings → Environment Variables**:
+   - `ONECLAW_AGENT_API_KEY` — the `ocv_...` key from the approval email
+   - `ONECLAW_AGENT_ID` — the agent UUID from the approval email
+   - `ONECLAW_VAULT_ID` — their vault UUID (from https://1claw.xyz → Vaults)
+5. Tell the human to **restart the agent** after setting the env vars.
+6. After restart, run `/oneclaw` to verify connection.
+
+**Never ask the human to paste credentials into the chat.** Always direct them to set env vars via the Pinata dashboard or their hosting platform.
 
 ### Manual setup (alternative)
 
+The human can also set up via the 1claw dashboard or CLI on their own machine:
+
 1. **Sign up** at https://1claw.xyz (Google SSO or email)
-2. **Create a vault and agent** via CLI or dashboard
-3. **Set agent credentials** as env vars or in the OpenClaw plugin config
+2. **Create a vault** and **create an agent** via dashboard or `1claw vault create` / `1claw agent create`
+3. **Set the 3 env vars** (`ONECLAW_AGENT_API_KEY`, `ONECLAW_AGENT_ID`, `ONECLAW_VAULT_ID`) in Pinata Settings → Environment Variables
+4. **Restart the agent**
 
 ### After enrollment
 
-- **Dashboard:** https://1claw.xyz — view vaults, agents, policies, audit logs
 - **Check status:** `/oneclaw` in chat
-- **Store secrets:** `1claw secret set <path> <value>`
+- **Dashboard:** https://1claw.xyz — view vaults, agents, policies, audit logs
+- **Store secrets:** `1claw secret set <path> <value>` (human runs on their machine)
 - **Enable Shroud:** `1claw agent update <agent-id> --shroud true`
 - **Enable Intents API:** `1claw agent update <agent-id> --intents-api true`
 

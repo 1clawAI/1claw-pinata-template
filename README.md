@@ -6,7 +6,7 @@ Pinata-style layout: repo root has **`manifest.json`** + this README; the OpenCl
 
 ### 1. Sign up at [1claw.xyz](https://1claw.xyz)
 
-Create an account (Google or email). You'll need it to enroll the agent.
+Create an account (Google or email) and create a vault.
 
 ### 2. Import this repo in Pinata Agents
 
@@ -14,15 +14,29 @@ The build script installs `@1claw/cli` and `@1claw/openclaw-plugin` automaticall
 
 ### 3. Enroll the agent
 
-In the chat, type:
+After pairing, type in the chat:
 
 ```
-/oneclaw-enroll
+/oneclaw-enroll you@example.com my-agent
 ```
 
-The plugin creates a scoped agent under your 1claw account and writes credentials to the OpenClaw config. **Your personal API key never enters the agent's environment.**
+Check your email and approve the enrollment.
 
-### 4. Store secrets
+### 4. Add credentials as env vars
+
+In your **Pinata agent Settings → Environment Variables**, add:
+
+| Variable | Value |
+| -------- | ----- |
+| `ONECLAW_AGENT_API_KEY` | `ocv_...` from the approval email |
+| `ONECLAW_AGENT_ID` | Agent UUID from the approval email |
+| `ONECLAW_VAULT_ID` | Vault UUID from [1claw.xyz](https://1claw.xyz) → Vaults |
+
+Restart the agent. Your personal API key never enters the agent's environment.
+
+### 5. Verify and store secrets
+
+In the chat, type `/oneclaw` to verify connection. Then store secrets via CLI on your machine:
 
 ```bash
 1claw secret set api-keys/openai "sk-..."
