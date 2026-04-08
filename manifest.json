@@ -25,14 +25,9 @@
         "authorUrl": "https://1claw.xyz",
         "authorLogoUrl": "https://1claw.xyz/logo.svg"
     },
-    "secrets": [
-        {
-            "name": "ONECLAW_HUMAN_API_KEY",
-            "description": "Your personal API key from 1claw.xyz (Settings → API Keys). Used once during setup to provision a vault and agent, then discardable."
-        }
-    ],
+    "secrets": [],
     "scripts": {
-        "build": "npm install -g @1claw/cli@0.13.0 && openclaw plugins install @1claw/openclaw-plugin@0.2.0 && node workspace/scripts/bootstrap.mjs"
+        "build": "npm install -g @1claw/cli@0.13.0 && openclaw plugins install @1claw/openclaw-plugin@0.2.0"
     },
     "tasks": [
         {

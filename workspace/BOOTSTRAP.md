@@ -2,38 +2,51 @@
 
 You are booting a workspace built for **1claw** (HSM-backed secret management) on **OpenClaw**.
 
-> The build script already installed the CLI, SDK, and OpenClaw plugin — and auto-provisioned a vault + agent using the human's API key.
+> The build script already installed `@1claw/cli` and the `@1claw/openclaw-plugin`. The human just needs to enroll.
 
-## 1) Get an API key
+## 1) Sign up at 1claw.xyz
 
-Sign up at **https://1claw.xyz** (Google or email), then go to **Settings → API Keys** and create one. Copy the `1ck_...` value.
+Go to **https://1claw.xyz** and create an account (Google or email).
 
-## 2) Import this template in Pinata
+## 2) Enroll the agent
 
-Pinata prompts for one secret:
+In the chat, type:
 
-| Secret | Value |
-| ------ | ----- |
-| `ONECLAW_HUMAN_API_KEY` | Your `1ck_...` key |
-
-The build script automatically:
-- Creates a vault (or uses your existing one)
-- Creates a scoped agent with read access
-- Writes agent credentials to `~/.config/1claw/`
-
-After setup, the agent uses its own scoped credentials. **You can revoke the `1ck_...` key from the dashboard for full isolation.**
-
-## Verify
-
-```bash
-1claw whoami && 1claw vault list && 1claw secret list
+```
+/oneclaw-enroll
 ```
 
-Store your first secret:
+The plugin walks through enrollment: it creates a scoped agent under the human's account and writes credentials to the OpenClaw config. The human's personal API key never enters the agent's environment.
+
+Alternatively, the human can enroll via CLI on the gateway host:
+
+```bash
+1claw login
+1claw vault create my-vault && 1claw vault link <vault-id>
+1claw agent create my-openclaw-agent
+```
+
+Then set the agent credentials in the OpenClaw plugin config or env vars:
+
+```bash
+export ONECLAW_AGENT_API_KEY="<ocv_...>"
+export ONECLAW_AGENT_ID="<agent-uuid>"
+export ONECLAW_VAULT_ID="<vault-uuid>"
+```
+
+## 3) Store your first secret
 
 ```bash
 1claw secret set api-keys/openai "sk-..."
 ```
+
+## Verify
+
+```bash
+/oneclaw
+```
+
+This shows connection status, vault info, and feature flags.
 
 ## Optional: Shroud & Intents API
 
@@ -53,9 +66,9 @@ If you also want 1claw tools inside your IDE, add to `.cursor/mcp.json`:
       "command": "npx",
       "args": ["-y", "@1claw/mcp"],
       "env": {
-        "ONECLAW_AGENT_ID": "<from 1claw config get agent-id>",
-        "ONECLAW_AGENT_API_KEY": "<from 1claw config get agent-api-key>",
-        "ONECLAW_VAULT_ID": "<from 1claw config get default-vault>"
+        "ONECLAW_AGENT_ID": "<agent-uuid>",
+        "ONECLAW_AGENT_API_KEY": "<ocv_...>",
+        "ONECLAW_VAULT_ID": "<vault-uuid>"
       }
     }
   }

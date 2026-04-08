@@ -300,8 +300,9 @@ const tx = await client.agents.submitTransaction("agent-id", {
 
 ### Human API key isolation
 
-- **Never read, reference, or use `ONECLAW_HUMAN_API_KEY`.** This env var contains the human's personal API key and is used only by the build-time bootstrap script (`workspace/scripts/bootstrap.mjs`).
-- The agent operates exclusively with its own scoped credentials stored in `~/.config/1claw/`.
+- **Never ask for, handle, or store the human's personal API key (`1ck_...`).** The human's key is never placed in the agent's environment.
+- Enrollment is done via `/oneclaw-enroll` (the plugin's built-in command) or by the human setting agent credentials directly.
+- The agent operates exclusively with its own scoped credentials.
 - If you need elevated permissions, ask the human to update the agent's scopes in the dashboard — do not attempt to use the human key.
 
 ### Dashboard security
@@ -399,21 +400,23 @@ Environment variables to configure:
 
 ## Connecting to the 1claw dashboard
 
-If this workspace was set up via the Pinata template, the bootstrap script already provisioned a vault and agent. The agent uses its own scoped credentials from `~/.config/1claw/`.
+### Enrollment (first time)
 
-### Manual setup (if not using the template)
+Type `/oneclaw-enroll` in the chat. The plugin creates a scoped agent under the human's 1claw account and writes credentials to the OpenClaw config. The human's personal API key never enters the agent's environment.
+
+### Manual setup (alternative)
 
 1. **Sign up** at https://1claw.xyz (Google SSO or email)
-2. **Get an API key** from Settings → API Keys
-3. **Import the template** in Pinata — paste the `1ck_...` key when prompted
+2. **Create a vault and agent** via CLI or dashboard
+3. **Set agent credentials** as env vars or in the OpenClaw plugin config
 
-Everything else is automatic. To manage the agent after setup:
+### After enrollment
 
 - **Dashboard:** https://1claw.xyz — view vaults, agents, policies, audit logs
+- **Check status:** `/oneclaw` in chat
 - **Store secrets:** `1claw secret set <path> <value>`
 - **Enable Shroud:** `1claw agent update <agent-id> --shroud true`
 - **Enable Intents API:** `1claw agent update <agent-id> --intents-api true`
-- **Revoke the setup key:** Settings → API Keys → revoke the `1ck_...` key used during bootstrap
 
 ---
 
