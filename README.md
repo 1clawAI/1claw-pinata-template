@@ -77,6 +77,26 @@ workspace/
 1claw agent update <agent-id> --intents-api true      # HSM transaction signing
 ```
 
+### OpenClaw + Shroud sidecar (local, lowest friction)
+
+The [CLI wizard “Custom provider”](https://docs.openclaw.ai/start/wizard-cli-reference#custom-provider) flow is for **generic** OpenAI-compatible URLs (paste base URL + API key). You **do not** need it for 1Claw + Shroud: the [`@1claw/openclaw-plugin`](https://www.npmjs.com/package/@1claw/openclaw-plugin) sends LLM traffic to Shroud (or your sidecar) via a **`before_model_resolve` hook** once Shroud is enabled on the agent.
+
+**Recommended path (same `ocv_` key as Pinata; no wizard “custom provider” step):**
+
+1. **Run the [Shroud sidecar](https://github.com/1clawAI/1claw-shroud-sidecar)** on the same machine as the OpenClaw gateway (binary or Docker), with the **same** agent credentials you use in Pinata:
+   - `ONECLAW_AGENT_ID` + `ONECLAW_AGENT_API_KEY`, or bootstrap with `ONECLAW_MASTER_API_KEY`.
+   - Default listen: `http://127.0.0.1:8080`.
+2. **Point the plugin at the sidecar** (env is enough for the gateway process):
+   - `ONECLAW_SHROUD_URL=http://127.0.0.1:8080`
+3. **Turn on Shroud routing in plugin config** (it is **off** by default) **and** enable Shroud on the agent (API):
+   - In `~/.openclaw/openclaw.json` under `plugins.entries.1claw.config`, set `features.shroudRouting` to `true` (or set the equivalent in Pinata env if your host injects JSON).
+   - Keep `1claw agent update <id> --shroud true` so the agent profile has `shroud_enabled` (the hook checks this).
+4. Restart the OpenClaw gateway.
+
+That matches how the plugin works today: the Shroud routing hook in [`1claw-openclaw-plugin`](https://github.com/1clawAI/1claw-openclaw-plugin) sets `providerOverride` to `shroudUrl` when the agent has Shroud enabled — so the **model base URL in the wizard** is not where you wire the sidecar; **`shroudUrl` + `shroudRouting`** is.
+
+**When *would* you use “Custom provider” with the sidecar?** If you are **not** using the plugin hook and want the gateway’s default OpenAI client to talk to `http://127.0.0.1:8080` directly: set compatibility to **OpenAI**, base URL **`http://127.0.0.1:8080`**, and use a real **provider API key** in the wizard if you rely on **BYOK** (the sidecar forwards `Authorization: Bearer …` to Shroud as `X-Shroud-Api-Key`). You still must run the sidecar with **1Claw agent** env vars so it can authenticate to Shroud. For vault-only keys, prefer the plugin path above instead of duplicating config in “Custom provider.”
+
 ## Optional: MCP server (Cursor / Claude Desktop)
 
 ```json
