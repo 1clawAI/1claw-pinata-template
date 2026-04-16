@@ -14,13 +14,21 @@ Pinata will prompt for `ONECLAW_AGENT_API_KEY` during import. Leave it blank for
 
 ### 3. Enroll the agent
 
-After pairing, type in the chat:
+After pairing, type in the chat using **`@1claw/openclaw-plugin`** (see `skills/1claw/SKILL.md` for exact slash command):
 
-```
-/oneclaw-enroll you@example.com my-agent
-```
+- **Email + name** (approval email is sent, and the chat also shows an **approval URL** if the server returns one — use it if mail is delayed or in spam):
 
-Check your email and approve the enrollment. The approval page (and a follow-up email) will show:
+  ```
+  /oneclaw-enroll you@example.com my-agent
+  ```
+
+- **Name only** (no email on file yet): the response includes a **unique approval URL**. Open it in a browser while signed in to your 1Claw account to approve adding the agent to your org.
+
+  ```
+  /oneclaw-enroll my-agent
+  ```
+
+After you approve, the approval page (and a follow-up email when an address was used) will show:
 
 ```
 ONECLAW_AGENT_API_KEY=ocv_...
