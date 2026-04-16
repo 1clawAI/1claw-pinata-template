@@ -28,13 +28,9 @@ After pairing, type in the chat using **`@1claw/openclaw-plugin`** (see `skills/
   /oneclaw-enroll my-agent
   ```
 
-After you approve, the approval page (and a follow-up email when an address was used) will show:
+After you approve, the 1claw dashboard approval page shows your **API key** (copy copies the key itself). Add it in **Pinata → your agent → Settings → Environment Variables** as **`ONECLAW_AGENT_API_KEY`** (value = the `ocv_...` string only). Approving in the browser alone does not inject the key into Pinata — you must paste it there and **restart** the agent.
 
-```
-ONECLAW_AGENT_API_KEY=ocv_...
-```
-
-Paste that into your **Pinata agent Settings → Environment Variables** and restart. That's the only env var you need — agent ID and vault are auto-discovered from the key.
+A follow-up email may also include the key when you enrolled with an email.
 
 ### 4. Verify
 
