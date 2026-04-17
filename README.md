@@ -68,11 +68,13 @@ workspace/
 
 ## Environment variables
 
+**In Pinata, only one value is a true secret: the agent API key.** Agent ID and vault ID are public identifiers (UUIDs), not credentials — the OpenClaw plugin resolves them from the API key and picks a sensible default vault (including the vault from `oneclaw_create_vault` in the same session). You do **not** need to paste vault or agent UUIDs into Pinata unless you are pinning a specific vault across multiple vaults.
+
 | Variable | Required | Description |
 | -------- | -------- | ----------- |
-| `ONECLAW_AGENT_API_KEY` | **Yes** | Agent API key (`ocv_...`) from enrollment approval |
-| `ONECLAW_AGENT_ID` | No | Auto-discovered from the API key |
-| `ONECLAW_VAULT_ID` | No | Auto-discovered from the token exchange |
+| `ONECLAW_AGENT_API_KEY` | **Yes** | Agent API key (`ocv_...`) from enrollment approval — **only this must be stored as a secret** |
+| `ONECLAW_AGENT_ID` | No | Optional; auto-resolved from the API key via token exchange |
+| `ONECLAW_VAULT_ID` | No | Optional; only if you must pin one vault when several exist — **not sensitive** |
 
 ## Optional: Shroud & Intents API
 
