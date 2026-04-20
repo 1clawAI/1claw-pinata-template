@@ -10,6 +10,12 @@ This folder is the agent workspace. Treat it as home and keep secrets out of git
 - **Intents API:** when `intents_api_enabled` is true, submit transaction intents via the CLI or SDK. Private keys never leave the HSM.
 - **Security:** never ask the user to sign in to the 1claw dashboard in a browser you control. If dashboard or policy changes are required, tell them to do it on **their** device/browser. See the skill's Security section.
 
+## Identity (do not guess)
+
+- Always resolve `agent_id`, `org_id`, `created_by`, and active `vault_id` from **MCP tool output** (`/oneclaw`, `oneclaw_list_vaults`, etc.). Never assume, paraphrase, or hallucinate UUIDs.
+- A zero UUID (`00000000-0000-0000-0000-000000000000`) is never valid. If you ever see one in a response or draft, stop and call the real tool again.
+- Resolved IDs live at `workspace/.1claw/identity.env` after first-run bootstrap (see `BOOTSTRAP.md`). Treat that file as the source of truth for IDs only — it never contains the `ocv_` API key.
+
 ## First run
 
 If `BOOTSTRAP.md` exists, follow it, then delete it when finished.

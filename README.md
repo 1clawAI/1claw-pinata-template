@@ -32,9 +32,16 @@ After you approve, the 1claw dashboard approval page shows your **API key** (cop
 
 A follow-up email may also include the key when you enrolled with an email.
 
-### 4. Verify
+### 4. Verify and let the agent self-bootstrap
 
-In the chat, type `/oneclaw` to verify connection. Then store secrets via CLI on your machine:
+In the chat, type `/oneclaw`. The agent will:
+
+1. Read back its **real agent ID** from the plugin (not a placeholder).
+2. **Create a vault** for you if you don't have one yet, named `<agent-name>-shared`.
+3. **Share that vault back with your 1claw account** (owner access) so you can see it at [1claw.xyz](https://1claw.xyz).
+4. Write the resolved non-secret IDs to `workspace/.1claw/identity.env` so you and the agent can reference them later. The `ocv_` key is **never** written there — only in Pinata env vars.
+
+Then store secrets via CLI on your machine or by asking the agent:
 
 ```bash
 1claw secret set api-keys/openai "sk-..."
