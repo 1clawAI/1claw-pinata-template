@@ -18,6 +18,37 @@
 
 ---
 
+## When to use what
+
+**MCP tools (`oneclaw_*`) are always your first choice.** The CLI is for the human on their own machine; the SDK is for custom code. You should only fall back to CLI or ask the human when MCP tools genuinely cannot do the job.
+
+### Decision matrix
+
+| Scenario | Use | Why |
+| -------- | --- | --- |
+| Store / read / delete / rotate a secret | `oneclaw_put_secret`, `oneclaw_get_secret`, etc. | Direct tool call — no shell needed |
+| Create a vault | `oneclaw_create_vault` | You get automatic owner access on vaults you create |
+| Grant yourself or others access | `oneclaw_grant_access` | Self-service policy creation — no human needed |
+| Share a secret | `oneclaw_share_secret` | Works for links, agent-to-agent, and back-to-human |
+| Submit / sign / simulate a transaction | `oneclaw_submit_transaction`, etc. | Full Intents API via MCP |
+| Inspect text for threats / PII | `oneclaw_inspect_content` | Works even without vault credentials |
+| Pull secrets as .env for a process | CLI: `1claw env run -- <cmd>` | No MCP equivalent — human runs this on their machine |
+| Rotate agent API key | CLI or dashboard | Agent cannot rotate its own key via MCP |
+| Enable Shroud / Intents API on agent | CLI or dashboard | Agent config changes require human action |
+| Change billing tier | Dashboard only | Human-only action |
+
+### Self-service patterns (avoid asking the human unnecessarily)
+
+**403 on a vault you created?** You have owner bypass — retry the operation. If it still fails, check that you're targeting the correct vault ID.
+
+**403 on someone else's vault?** Call `oneclaw_grant_access` if you have the authority (e.g. you were granted admin). If not, ask the human with a specific instruction.
+
+**No vault exists yet?** Call `oneclaw_create_vault`, then `oneclaw_grant_access` to share it with the human. Don't tell the human to go create one.
+
+**Need a policy for yourself?** Call `oneclaw_grant_access` with your own agent ID as the principal. You can do this on vaults you own.
+
+---
+
 ## CLI reference (`@1claw/cli`)
 
 The CLI is the primary interface for managing vaults, secrets, agents, policies, and transactions.
@@ -138,9 +169,9 @@ echo "sk_live_..." | 1claw secret set <path> --stdin  # From stdin
 
 ---
 
-## MCP tools (`@1claw/mcp`)
+## MCP tools (`@1claw/mcp`) — your primary interface
 
-When the MCP server is configured, the agent gets these tools:
+These are **your** tools. Use them directly — don't tell the human to run CLI commands for operations you can do here.
 
 | Tool | Description |
 | ---- | ----------- |

@@ -4,6 +4,8 @@ You are booting a workspace built for **1claw** (HSM-backed secret management) o
 
 > The build script already installed `@1claw/cli` and the `@1claw/openclaw-plugin`. Human only needs to enroll once; everything after that is automated by the agent.
 
+> **Reminder:** Use `oneclaw_*` MCP tools for every step below. Do not tell the human to run CLI commands for things you can do yourself. See `AGENTS.md` § "MCP-first principle".
+
 ---
 
 ## Step 1 — Enroll
@@ -74,6 +76,9 @@ Once `workspace/.1claw/identity.env` exists and `/oneclaw` shows connected, dele
 |---------|------------|
 | `/oneclaw` shows "not configured" | Human hasn't set `ONECLAW_AGENT_API_KEY` or hasn't restarted the agent after setting it. Remind them of both steps. |
 | Agent ID returned as empty or zero | **Do not proceed.** Ask the human to re-check the API key (paste matches the approval page; no quotes; restart performed). |
-| `list_vaults` returns 403 | API key is valid but the agent has no policies yet. This is expected before Step 3; continue with `create_vault`. |
+| `list_vaults` returns 403 | API key is valid but the agent has no policies yet. This is expected before Step 3; continue with `oneclaw_create_vault` — you get automatic owner access on vaults you create. |
+| `put_secret` or `get_secret` returns 403 | **Try `oneclaw_grant_access` first** to give yourself a policy on the vault. You can do this on vaults you own. Only ask the human if you don't own the vault and can't self-grant. |
 | `grant_access` fails with "user not found" | `created_by` may be missing because the agent was enrolled without an email. Fall back to telling the human to grant themselves access via the dashboard, and skip the share. |
 | `create_vault` fails with billing error | Human's org has hit the vault limit on the free tier. Tell them to upgrade or delete an unused vault, then re-run `/oneclaw` to retry. |
+
+**General rule for 403 errors:** Before asking the human for help, check if `oneclaw_grant_access` can fix the problem. You can grant yourself access to vaults you created (owner bypass). Only escalate to the human when you genuinely cannot self-remediate.

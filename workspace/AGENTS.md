@@ -2,12 +2,50 @@
 
 This folder is the agent workspace. Treat it as home and keep secrets out of git.
 
+## MCP-first principle
+
+**Always use MCP tools (`oneclaw_*`) before falling back to the CLI or asking the human.**
+
+You have `oneclaw_*` tools available right now — they are your primary interface to 1claw. The CLI is for the *human* on their own machine; MCP tools are for *you*.
+
+### Decision order
+
+1. **Can an MCP tool do it?** → Use the MCP tool. This covers secrets (CRUD, rotate), vaults (create, list), policies (`oneclaw_grant_access`), sharing, transactions, and content inspection.
+2. **No MCP tool exists for it?** → Try the CLI via shell if the CLI is installed (check `TOOLS.md`).
+3. **Neither works / requires human credentials?** → Ask the human, with a specific instruction (not a general "go to the dashboard").
+
+### Common mistake to avoid
+
+When an operation fails with 403 or "no policy", **do not** immediately tell the human to create a policy via the dashboard or CLI. First check whether you can fix it yourself:
+
+- **`oneclaw_grant_access`** — grants vault access to a user or agent (you can grant yourself access on vaults you created via owner bypass, or grant other principals).
+- **`oneclaw_create_vault`** → you automatically have owner access to vaults you create.
+- If you truly cannot self-remediate (e.g. you need a policy on a vault you did not create and do not own), *then* ask the human — but be specific: give them the exact command or dashboard path.
+
+### Quick MCP tool reference
+
+| Need | MCP tool |
+| ---- | -------- |
+| Store a secret | `oneclaw_put_secret` |
+| Read a secret | `oneclaw_get_secret` |
+| List secrets | `oneclaw_list_secrets` |
+| Delete a secret | `oneclaw_delete_secret` |
+| Rotate a secret | `oneclaw_rotate_and_store` |
+| Create a vault | `oneclaw_create_vault` |
+| List vaults | `oneclaw_list_vaults` |
+| Grant access (policy) | `oneclaw_grant_access` |
+| Share a secret | `oneclaw_share_secret` |
+| Submit transaction | `oneclaw_submit_transaction` |
+| Sign transaction | `oneclaw_sign_transaction` |
+| Simulate transaction | `oneclaw_simulate_transaction` |
+| Inspect content | `oneclaw_inspect_content` |
+
 ## 1claw (secret management / Shroud / Intents API)
 
-- When the agent needs **API keys, credentials, or other secrets**, follow `skills/1claw/SKILL.md` and use the `1claw` CLI or MCP tools on the gateway host.
-- **Never paste secrets into chat.** Use `1claw secret get <path>` or the MCP `get_secret` tool to fetch secrets at runtime.
+- When the agent needs **API keys, credentials, or other secrets**, use the `oneclaw_get_secret` MCP tool to fetch them at runtime.
+- **Never paste secrets into chat.** Use `oneclaw_get_secret` or (on the human's machine) `1claw secret get <path>`.
 - **Shroud:** when `shroud_enabled` is true on the agent, LLM traffic is automatically routed through the TEE proxy for inspection and redaction.
-- **Intents API:** when `intents_api_enabled` is true, submit transaction intents via the CLI or SDK. Private keys never leave the HSM.
+- **Intents API:** when `intents_api_enabled` is true, submit transaction intents via `oneclaw_submit_transaction`. Private keys never leave the HSM.
 - **Security:** never ask the user to sign in to the 1claw dashboard in a browser you control. If dashboard or policy changes are required, tell them to do it on **their** device/browser. See the skill's Security section.
 
 ## Identity (do not guess)
@@ -56,6 +94,8 @@ You are not the user's voice. Do not leak private context. Prefer short, useful 
 ## Tools
 
 Skills define tools. Use `skills/1claw/SKILL.md` for vault, secrets, Shroud, and Intents API. Keep host-specific notes (vault IDs, agent IDs, policies) in `TOOLS.md`.
+
+Remember: **MCP tools first**, CLI second, ask the human last. See the "MCP-first principle" section at the top of this file.
 
 ## Heartbeats
 

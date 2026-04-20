@@ -2,8 +2,11 @@
 
 Skills describe *how* tools work. This file is for **your** environment: IDs, URLs, policies, and reminders.
 
+> **Reminder:** You have `oneclaw_*` MCP tools. Use them directly for secrets, vaults, policies, sharing, and transactions. Don't default to CLI commands or ask the human to do things you can do yourself. See `AGENTS.md` § "MCP-first principle".
+
 ## 1claw
 
+- **MCP tools** (`oneclaw_*`): Your primary interface — secrets CRUD, vaults, policies (`oneclaw_grant_access`), sharing, transactions, content inspection. Always try these first.
 - CLI install: `npm install -g @1claw/cli@0.15.1` (provisioned automatically by `manifest.json`'s build script)
 - OpenClaw plugin: `openclaw plugins install @1claw/openclaw-plugin@0.3.1` (also auto-installed at build time; this is what registers `/oneclaw`, `/oneclaw-enroll`, `/oneclaw-bootstrap`, and the `oneclaw_*` tools)
 - After login: `1claw whoami` should show the authenticated user.
