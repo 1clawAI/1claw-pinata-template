@@ -32,7 +32,7 @@
         }
     ],
     "scripts": {
-        "build": "npm cache clean --force && rm -rf /home/node/.npm-global/lib/node_modules/@1claw/.cli-* && npm install -g @1claw/cli@0.15.1 && openclaw plugins install @1claw/openclaw-plugin@0.3.0"
+        "build": "npm cache clean --force && rm -rf /home/node/.npm-global/lib/node_modules/@1claw/cli /home/node/.npm-global/lib/node_modules/@1claw/.cli-* && npm install -g @1claw/cli@0.15.1 && openclaw plugins install @1claw/openclaw-plugin@0.3.1"
     },
     "tasks": [
         {
