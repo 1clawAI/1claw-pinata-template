@@ -2,7 +2,7 @@
 
 > **Version:** 0.2.0
 > **Requires:** `bins: ["1claw"]`
-> **Packages:** `@1claw/cli@0.22.0` · `@1claw/sdk@0.23.0` · `@1claw/mcp@0.23.0` · `@1claw/openclaw-plugin@0.3.1`
+> **Packages:** `@1claw/cli@0.22.0` · `@1claw/sdk@0.23.0` · `@1claw/mcp@0.23.0` · `@1claw/openclaw-plugin@0.4.0`
 
 ## What 1claw does
 
@@ -376,7 +376,7 @@ Environment variables to configure:
 | `ONECLAW_MCP_SANITIZATION_MODE` | `block` | `block`, `surgical`, or `log_only` |
 | `ONECLAW_MCP_REDACT_SECRETS` | `true` | Redact known secret values from outputs |
 | `ONECLAW_MCP_PII_DETECTION` | `true` | Detect PII patterns |
-| `ONECLAW_MCP_EXFIL_PROTECTION` | `warn` | `block`, `warn`, or `off` |
+| `ONECLAW_MCP_EXFIL_PROTECTION` | `block` | `block`, `warn`, or `off` |
 
 ---
 
