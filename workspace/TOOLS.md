@@ -7,8 +7,8 @@ Skills describe *how* tools work. This file is for **your** environment: IDs, UR
 ## 1claw
 
 - **MCP tools** (`oneclaw_*`): Your primary interface — secrets CRUD, vaults, policies (`oneclaw_grant_access`), sharing, transactions, content inspection. Always try these first.
-- CLI install: `npm install -g @1claw/cli@0.15.1` (provisioned automatically by `manifest.json`'s build script)
-- OpenClaw plugin: `openclaw plugins install @1claw/openclaw-plugin@0.3.1` (also auto-installed at build time; this is what registers `/oneclaw`, `/oneclaw-enroll`, `/oneclaw-bootstrap`, and the `oneclaw_*` tools)
+- CLI install: `npm install -g @1claw/cli@0.22.1` (provisioned automatically by `manifest.json`'s build script)
+- OpenClaw plugin: `openclaw plugins install @1claw/openclaw-plugin@0.4.0` (also auto-installed at build time; this is what registers `/oneclaw`, `/oneclaw-enroll`, `/oneclaw-bootstrap`, and the `oneclaw_*` tools)
 - After login: `1claw whoami` should show the authenticated user.
 - After vault link: `1claw vault list` should show linked vault.
 - Dashboard: https://1claw.xyz
