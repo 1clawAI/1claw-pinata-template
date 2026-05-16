@@ -169,9 +169,9 @@ echo "sk_live_..." | 1claw secret set <path> --stdin  # From stdin
 
 ---
 
-## MCP tools (`@1claw/mcp`) — your primary interface
+## MCP tools (`@1claw/mcp`) — your primary interface (27+ tools)
 
-These are **your** tools. Use them directly — don't tell the human to run CLI commands for operations you can do here.
+These are **your** tools. Use them directly — don't tell the human to run CLI commands for operations you can do here. The table below lists the most common tools; see the full list in the [MCP README](https://www.npmjs.com/package/@1claw/mcp).
 
 | Tool | Description |
 | ---- | ----------- |
@@ -227,7 +227,7 @@ For security inspection without a 1claw account:
 
 ## OpenClaw plugin (`@1claw/openclaw-plugin`)
 
-The plugin registers 13 tools with the OpenClaw gateway under the `oneclaw_` prefix (e.g. `oneclaw_list_secrets`, `oneclaw_get_secret`).
+The plugin registers 18 tools with the OpenClaw gateway under the `oneclaw_` prefix (e.g. `oneclaw_list_secrets`, `oneclaw_get_secret`).
 
 ### Features (all toggleable)
 
@@ -238,7 +238,7 @@ The plugin registers 13 tools with the OpenClaw gateway under the `oneclaw_` pre
 | `secretInjection` | off | Replace `{{1claw:path/to/secret}}` placeholders at prompt time |
 | `shroudRouting` | off | Route LLM traffic through Shroud TEE |
 | `keyRotationMonitor` | off | Background warnings for secrets expiring within 7 days |
-| `slashCommands` | off | `/oneclaw`, `/oneclaw-list`, `/oneclaw-rotate` |
+| `slashCommands` | on | `/oneclaw`, `/oneclaw-list`, `/oneclaw-rotate` |
 
 ### Plugin config
 
