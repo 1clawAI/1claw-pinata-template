@@ -44,8 +44,14 @@ In the chat, type `/oneclaw`. The agent will:
 Then store secrets via CLI on your machine or by asking the agent:
 
 ```bash
+# Store a single secret
 1claw secret set api-keys/openai "sk-..."
+
+# Or import all secrets from a .env file at once
+1claw import .env
 ```
+
+> **Tip:** Run `1claw setup` to auto-configure Cursor, Claude Desktop, and other AI clients to use the 1Claw MCP server — no manual JSON editing required.
 
 Your agent fetches secrets at runtime — they never appear in context, logs, or memory.
 
