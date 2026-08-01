@@ -59,8 +59,8 @@ Your agent fetches secrets at runtime — they never appear in context, logs, or
 
 | Package | Purpose |
 | ------- | ------- |
-| [`@1claw/cli`](https://www.npmjs.com/package/@1claw/cli) | CLI for vaults, secrets, agents, policies, transactions, and CI/CD |
-| [`@1claw/sdk`](https://www.npmjs.com/package/@1claw/sdk) | TypeScript SDK for programmatic vault access |
+| [`@1claw/cli`](https://www.npmjs.com/package/@1claw/cli) | CLI for vaults, secrets, agents, policies, transactions, automations, runtimes, and CI/CD |
+| [`@1claw/sdk`](https://www.npmjs.com/package/@1claw/sdk) | TypeScript SDK for programmatic vault access, memory, automations, runtimes, and discovery |
 | [`@1claw/openclaw-plugin`](https://www.npmjs.com/package/@1claw/openclaw-plugin) | OpenClaw gateway plugin — tools, secret redaction, Shroud routing |
 | [`@1claw/mcp`](https://www.npmjs.com/package/@1claw/mcp) | MCP server for Cursor, Claude Desktop, and GPT |
 
@@ -88,6 +88,52 @@ workspace/
 | `ONECLAW_AGENT_API_KEY` | **Yes** | Agent API key (`ocv_...`) from enrollment approval — **only this must be stored as a secret** |
 | `ONECLAW_AGENT_ID` | No | Optional; auto-resolved from the API key via token exchange |
 | `ONECLAW_VAULT_ID` | No | Optional; only if you must pin one vault when several exist — **not sensitive** |
+
+## New in v0.42: Automations, Runtimes, Memory & Discovery
+
+### Automations
+
+Schedule recurring tasks for your agent — cron-based secret rotation, health checks, or periodic API calls:
+
+```bash
+1claw agent update <agent-id> --automations true
+```
+
+In the chat, use the `oneclaw_create_automation` tool to define cron schedules. The agent can list and manage its own automations through the MCP tools.
+
+### Runtimes
+
+Deploy and manage agent runtime environments directly from 1Claw:
+
+```bash
+1claw agent update <agent-id> --runtime-hosting true
+```
+
+Runtimes provide managed compute for your agent with built-in secret injection, health monitoring, and auto-scaling.
+
+### Agent Memory
+
+Persistent vector memory lets your agent store and recall context across sessions:
+
+```bash
+# Store a memory
+/oneclaw-memory store "User prefers JSON output format"
+
+# Search memories
+/oneclaw-memory search "output preferences"
+```
+
+Memory entries are stored encrypted in the vault with semantic search via embeddings.
+
+### Agent Discovery
+
+Publish your agent to the 1Claw directory so others can find and connect:
+
+```bash
+1claw agent update <agent-id> --discoverable true --listing-description "My helpful agent"
+```
+
+---
 
 ## Optional: Shroud & Intents API
 
