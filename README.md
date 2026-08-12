@@ -1,6 +1,10 @@
 # OpenClaw workspace: 1claw (HSM-backed secret management for AI agents)
 
-Pinata-style layout: repo root has **`manifest.json`** + this README; the OpenClaw home is **`workspace/`** (see [PinataCloud/agent-template](https://github.com/PinataCloud/agent-template)).
+A ready-to-import OpenClaw workspace for [Pinata Agents](https://pinata.cloud). Pinata-style layout: repo root has **`manifest.json`** + this README; the OpenClaw home is **`workspace/`** (see [PinataCloud/agent-template](https://github.com/PinataCloud/agent-template)).
+
+Pinata runs your agent in the cloud. This template connects it to 1Claw so API keys and tokens live in an encrypted vault instead of Pinata environment variables alone. You enroll once, paste the `ocv_` key into Pinata settings, and the agent fetches secrets at runtime through the OpenClaw plugin.
+
+The included `@1claw/openclaw-plugin` gives the agent vault tools, secret redaction, and optional Shroud routing. You manage policies and secrets from [1claw.xyz](https://1claw.xyz) or the CLI on your laptop.
 
 ## Quick start
 
