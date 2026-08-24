@@ -93,6 +93,31 @@ workspace/
 | `ONECLAW_AGENT_ID` | No | Optional; auto-resolved from the API key via token exchange |
 | `ONECLAW_VAULT_ID` | No | Optional; only if you must pin one vault when several exist — **not sensitive** |
 
+## New in v0.56: Guardrails, HFA & Safe migration
+
+### Human Factor Auth (treasury)
+
+Configure wallet send/swap/export to require password or passkey in the [1claw dashboard](https://1claw.xyz/settings/security) → **Wallet human factor auth**. Passkey-only modes work in the treasury Send/Swap dialogs and in `@1claw/wallet-react`.
+
+### Guardrail governance
+
+Execution guardrails support Convention 6 shadow mode (`enforcement: log|enforce`). Org owners see shadow reports and revision history under **Settings → Security → Guardrails**. Agents can dry-run guardrail changes from the agent detail page (**Replay guardrails**).
+
+### Safe migration (counterfactual)
+
+Migrate an agent EOA to a counterfactual Safe from the dashboard (**Agents → agent → Migrate to Safe**) or via CLI:
+
+```bash
+1claw agent accounts list <agent-id>
+1claw agent accounts migrate <agent-id> --chain ethereum
+1claw safe module-registry ethereum
+1claw safe sync-allowances
+```
+
+On-chain Safe deploy and Guard module broadcast remain **501** until external audit completes — counterfactual addresses are derived and used for signing paths today.
+
+---
+
 ## New in v0.42: Automations, Runtimes, Memory & Discovery
 
 ### Automations
@@ -181,6 +206,15 @@ That matches how the plugin works today: the Shroud routing hook in [`1claw-open
   }
 }
 ```
+
+## Platform v0.56+ (HITL, HFA, Safe, guardrail governance)
+
+This template pins **`@1claw/cli@0.56.2`** and **`@1claw/openclaw-plugin@0.56.2`**. Configure on agents at [1claw.xyz](https://1claw.xyz):
+
+- **Graduated HITL** — Intents API txs/sign/execute may return `202 awaiting_approval`.
+- **Guardrail governance** — Shadow/enforce execution guardrails; widening guardrails requires approval.
+- **Safe foundation** — `1claw agent accounts list|migrate`, `1claw safe module-registry`.
+- **Human Factor Auth** — Human treasury flows only (`@1claw/wallet-react`); agents use guardrails + HITL.
 
 ## OpenClaw
 
