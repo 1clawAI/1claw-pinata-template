@@ -207,6 +207,17 @@ That matches how the plugin works today: the Shroud routing hook in [`1claw-open
 }
 ```
 
+## Platform v0.59+ (connection-scoped plt_ routes)
+
+Platform operators building on 1Claw use **`plt_` keys** with connection-scoped routes (not org-bound `/v1/agents/*`):
+
+- **`GET .../signing-keys`** — agent on-chain addresses (not `wallet_address` from SIWE)
+- **`PATCH .../agents/{id}`** — enable Intents without re-bootstrap
+- **`GET .../portfolio`**, **`POST .../pending-approvals`**, **`GET/POST .../automations`**, memory CRUD — v0.59.4
+- **`POST /v1/shroud/inspect-content`** — threat scan (MCP `inspect_content` parity)
+
+Docs: [Platform API overview](https://docs.1claw.xyz/docs/platform-api/overview). SDK `@1claw/sdk@0.59.4`.
+
 ## Platform v0.56+ (HITL, HFA, Safe, guardrail governance)
 
 This template pins **`@1claw/cli@0.56.2`** and **`@1claw/openclaw-plugin@0.56.2`**. Configure on agents at [1claw.xyz](https://1claw.xyz):
