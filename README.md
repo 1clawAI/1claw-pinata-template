@@ -4,11 +4,11 @@ A ready-to-import OpenClaw workspace for [Pinata Agents](https://pinata.cloud). 
 
 Pinata runs your agent in the cloud. This template connects it to 1Claw so API keys and tokens live in an encrypted vault instead of Pinata environment variables alone. You enroll once, paste the `ocv_` key into Pinata settings, and the agent fetches secrets at runtime through the OpenClaw plugin.
 
-The included `@1claw/openclaw-plugin` gives the agent vault tools, secret redaction, and optional Shroud routing. You manage policies and secrets from [1claw.xyz](https://1claw.xyz) or the CLI on your laptop.
+The included `@1claw/openclaw-plugin` gives the agent vault tools, secret redaction, and optional Shroud routing. You manage policies and secrets from [1claw.co](https://1claw.co) or the CLI on your laptop.
 
 ## Quick start
 
-### 1. Sign up at [1claw.xyz](https://1claw.xyz)
+### 1. Sign up at [1claw.co](https://1claw.co)
 
 Create an account (Google or email) and create a vault.
 
@@ -42,7 +42,7 @@ In the chat, type `/oneclaw`. The agent will:
 
 1. Read back its **real agent ID** from the plugin (not a placeholder).
 2. **Create a vault** for you if you don't have one yet, named `<agent-name>-shared`.
-3. **Share that vault back with your 1claw account** (owner access) so you can see it at [1claw.xyz](https://1claw.xyz).
+3. **Share that vault back with your 1claw account** (owner access) so you can see it at [1claw.co](https://1claw.co).
 4. Write the resolved non-secret IDs to `workspace/.1claw/identity.env` so you and the agent can reference them later. The `ocv_` key is **never** written there — only in Pinata env vars.
 
 Then store secrets via CLI on your machine or by asking the agent:
@@ -97,7 +97,7 @@ workspace/
 
 ### Human Factor Auth (treasury)
 
-Configure wallet send/swap/export to require password or passkey in the [1claw dashboard](https://1claw.xyz/settings/security) → **Wallet human factor auth**. Passkey-only modes work in the treasury Send/Swap dialogs and in `@1claw/wallet-react`.
+Configure wallet send/swap/export to require password or passkey in the [1claw dashboard](https://1claw.co/settings/security) → **Wallet human factor auth**. Passkey-only modes work in the treasury Send/Swap dialogs and in `@1claw/wallet-react`.
 
 ### Guardrail governance
 
@@ -216,11 +216,11 @@ Platform operators building on 1Claw use **`plt_` keys** with connection-scoped 
 - **`GET .../portfolio`**, **`POST .../pending-approvals`**, **`GET/POST .../automations`**, memory CRUD — v0.59.4
 - **`POST /v1/shroud/inspect-content`** — threat scan (MCP `inspect_content` parity)
 
-Docs: [Platform API overview](https://docs.1claw.xyz/docs/platform-api/overview). SDK `@1claw/sdk@0.59.4`.
+Docs: [Platform API overview](https://docs.1claw.co/docs/platform-api/overview). SDK `@1claw/sdk@0.59.4`.
 
 ## Platform v0.56+ (HITL, HFA, Safe, guardrail governance)
 
-This template pins **`@1claw/cli@0.56.2`** and **`@1claw/openclaw-plugin@0.56.2`**. Configure on agents at [1claw.xyz](https://1claw.xyz):
+This template pins **`@1claw/cli@0.56.2`** and **`@1claw/openclaw-plugin@0.56.2`**. Configure on agents at [1claw.co](https://1claw.co):
 
 - **Graduated HITL** — Intents API txs/sign/execute may return `202 awaiting_approval`.
 - **Guardrail governance** — Shadow/enforce execution guardrails; widening guardrails requires approval.
@@ -233,7 +233,7 @@ Point `agents.defaults.workspace` at **`…/workspace`** (this repo's `workspace
 
 ## Links
 
-- [1claw dashboard](https://1claw.xyz) · [Docs](https://docs.1claw.xyz) · [OpenClaw docs](https://docs.openclaw.ai)
+- [1claw dashboard](https://1claw.co) · [Docs](https://docs.1claw.co) · [OpenClaw docs](https://docs.openclaw.ai)
 
 ## License
 
