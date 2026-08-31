@@ -58,7 +58,7 @@ Then follow this sequence using MCP tools (`oneclaw_*`):
    ONECLAW_ORG_ID=<org UUID>
    ONECLAW_VAULT_ID=<active vault UUID>
    ONECLAW_CREATED_BY=<human user UUID>
-   ONECLAW_BASE_URL=https://api.1claw.xyz
+   ONECLAW_BASE_URL=https://api.1claw.co
    ```
    Create `workspace/.1claw/` if it doesn't exist. Never write the `ocv_` key to this file.
 5. **Confirm** to the human:

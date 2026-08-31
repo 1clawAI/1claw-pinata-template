@@ -12,9 +12,9 @@
 2. **Shroud** — A TEE (Trusted Execution Environment) proxy that sits between your agent and LLM providers. Inspects every request/response for prompt injection, PII, command injection, social engineering, and more.
 3. **Intents API** — Sign and broadcast on-chain transactions without the agent ever holding private keys. Keys stay in the HSM; the agent submits intent, the infrastructure signs.
 
-**Dashboard:** https://1claw.xyz
+**Dashboard:** https://1claw.co
 **Docs:** https://docs.1claw.xyz
-**API:** https://api.1claw.xyz
+**API:** https://api.1claw.co
 
 ---
 
@@ -202,7 +202,7 @@ Environment variables:
 | `ONECLAW_AGENT_API_KEY` | **Yes** | Agent API key (`ocv_...`) — agent ID and vault auto-discovered |
 | `ONECLAW_AGENT_ID` | No | Auto-resolved from key prefix; set to override |
 | `ONECLAW_VAULT_ID` | No | Auto-discovered from token exchange; set to override |
-| `ONECLAW_BASE_URL` | No | Default: `https://api.1claw.xyz` |
+| `ONECLAW_BASE_URL` | No | Default: `https://api.1claw.co` |
 | `ONECLAW_LOCAL_ONLY` | No | Set `true` for security-only mode (only `inspect_content`) |
 
 ### Local-only mode
@@ -279,7 +279,7 @@ For programmatic access in TypeScript/JavaScript:
 import { createClient } from "@1claw/sdk";
 
 const client = createClient({
-  baseUrl: "https://api.1claw.xyz",
+  baseUrl: "https://api.1claw.co",
   apiKey: "ocv_...",
   agentId: "agent-uuid",
 });
@@ -339,14 +339,14 @@ const tx = await client.agents.submitTransaction("agent-id", {
 ### Dashboard security
 
 - Never ask the user to sign in to the 1claw dashboard in a browser you control.
-- If dashboard changes are needed (policies, agent config, Shroud settings), instruct the user to do it on **their own device/browser** at https://1claw.xyz.
+- If dashboard changes are needed (policies, agent config, Shroud settings), instruct the user to do it on **their own device/browser** at https://1claw.co.
 - Never attempt to automate dashboard login flows.
 
 ### Shroud (LLM traffic inspection)
 
 When `shroud_enabled` is true on the agent:
 
-- All LLM traffic is routed through `https://shroud.1claw.xyz`
+- All LLM traffic is routed through `https://shroud.1claw.co`
 - 6-layer threat detection: Unicode normalization, command injection, social engineering, encoding obfuscation, network threats, filesystem protection
 - PII is automatically redacted before reaching the LLM provider
 - Per-agent config controls providers, models, token caps, blocked domains
@@ -475,7 +475,7 @@ The first time the agent connects, run this sequence **using the real values ret
    ONECLAW_ORG_ID=<org UUID>
    ONECLAW_VAULT_ID=<active vault UUID>
    ONECLAW_CREATED_BY=<human user UUID>
-   ONECLAW_BASE_URL=https://api.1claw.xyz
+   ONECLAW_BASE_URL=https://api.1claw.co
    ```
    **Never** put `ONECLAW_AGENT_API_KEY` or any `ocv_` value into this file. That belongs only in the Pinata environment variable.
 5. **Confirm** to the human with the real agent ID, vault name, and their granted role. If a policy is needed for a specific scope, use the real agent UUID you just recorded — not a placeholder.
@@ -484,7 +484,7 @@ The first time the agent connects, run this sequence **using the real values ret
 
 The human can also set up via the 1claw dashboard or CLI on their own machine:
 
-1. **Sign up** at https://1claw.xyz (Google SSO or email)
+1. **Sign up** at https://1claw.co (Google SSO or email)
 2. **Create a vault** and **create an agent** via dashboard or `1claw vault create` / `1claw agent create`
 3. **Set `ONECLAW_AGENT_API_KEY`** in Pinata Settings → Environment Variables (agent ID and vault auto-discovered)
 4. **Restart the agent**
@@ -492,7 +492,7 @@ The human can also set up via the 1claw dashboard or CLI on their own machine:
 ### After enrollment
 
 - **Check status:** `/oneclaw` in chat
-- **Dashboard:** https://1claw.xyz — view vaults, agents, policies, audit logs
+- **Dashboard:** https://1claw.co — view vaults, agents, policies, audit logs
 - **Store secrets:** `1claw secret set <path> <value>` (human runs on their machine)
 - **Enable Shroud:** `1claw agent update <agent-id> --shroud true`
 - **Enable Intents API:** `1claw agent update <agent-id> --intents-api true`
@@ -514,11 +514,11 @@ The human can also set up via the 1claw dashboard or CLI on their own machine:
 
 ## Links
 
-- **Dashboard:** https://1claw.xyz
+- **Dashboard:** https://1claw.co
 - **Docs:** https://docs.1claw.xyz
-- **API:** https://api.1claw.xyz
-- **MCP:** https://mcp.1claw.xyz
-- **Shroud:** https://shroud.1claw.xyz
+- **API:** https://api.1claw.co
+- **MCP:** https://mcp.1claw.co
+- **Shroud:** https://shroud.1claw.co
 - **npm — CLI:** https://www.npmjs.com/package/@1claw/cli
 - **npm — SDK:** https://www.npmjs.com/package/@1claw/sdk
 - **npm — MCP:** https://www.npmjs.com/package/@1claw/mcp
