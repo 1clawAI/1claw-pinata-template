@@ -13,7 +13,7 @@
 3. **Intents API** — Sign and broadcast on-chain transactions without the agent ever holding private keys. Keys stay in the HSM; the agent submits intent, the infrastructure signs.
 
 **Dashboard:** https://1claw.co
-**Docs:** https://docs.1claw.xyz
+**Docs:** https://docs.1claw.co
 **API:** https://api.1claw.co
 
 ---
@@ -56,7 +56,7 @@ The CLI is the primary interface for managing vaults, secrets, agents, policies,
 ### Authentication
 
 ```bash
-1claw login                    # Browser-based login (opens 1claw.xyz/cli/verify)
+1claw login                    # Browser-based login (opens 1claw.co/cli/verify)
 1claw login --email            # Email/password login (supports MFA)
 1claw logout                   # Clear stored credentials
 1claw whoami                   # Show current user info
@@ -515,7 +515,7 @@ The human can also set up via the 1claw dashboard or CLI on their own machine:
 ## Links
 
 - **Dashboard:** https://1claw.co
-- **Docs:** https://docs.1claw.xyz
+- **Docs:** https://docs.1claw.co
 - **API:** https://api.1claw.co
 - **MCP:** https://mcp.1claw.co
 - **Shroud:** https://shroud.1claw.co
