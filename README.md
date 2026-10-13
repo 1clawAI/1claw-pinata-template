@@ -216,11 +216,11 @@ Platform operators building on 1Claw use **`plt_` keys** with connection-scoped 
 - **`GET .../portfolio`**, **`POST .../pending-approvals`**, **`GET/POST .../automations`**, memory CRUD — v0.59.4
 - **`POST /v1/shroud/inspect-content`** — threat scan (MCP `inspect_content` parity)
 
-Docs: [Platform API overview](https://docs.1claw.co/docs/platform-api/overview). SDK `@1claw/sdk@0.59.4`.
+Docs: [Platform API overview](https://docs.1claw.co/docs/platform-api/overview). SDK `@1claw/sdk@0.62.0`.
 
 ## Platform v0.56+ (HITL, HFA, Safe, guardrail governance)
 
-This template pins **`@1claw/cli@0.56.2`** and **`@1claw/openclaw-plugin@0.56.2`**. Configure on agents at [1claw.co](https://1claw.co):
+This template pins **`@1claw/cli@0.61.32`** and **`@1claw/openclaw-plugin@0.57.2`**. Configure on agents at [1claw.co](https://1claw.co):
 
 - **Graduated HITL** — Intents API txs/sign/execute may return `202 awaiting_approval`.
 - **Guardrail governance** — Shadow/enforce execution guardrails; widening guardrails requires approval.

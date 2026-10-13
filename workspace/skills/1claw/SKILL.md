@@ -2,7 +2,7 @@
 
 > **Version:** 0.2.0
 > **Requires:** `bins: ["1claw"]`
-> **Packages:** `@1claw/cli@0.22.1` · `@1claw/sdk@0.24.0` · `@1claw/mcp@0.23.1` · `@1claw/openclaw-plugin@0.4.0`
+> **Packages:** `@1claw/cli@0.61.32` · `@1claw/sdk@0.62.0` · `@1claw/mcp@0.63.12` · `@1claw/openclaw-plugin@0.57.2`
 
 ## What 1claw does
 
@@ -169,7 +169,7 @@ echo "sk_live_..." | 1claw secret set <path> --stdin  # From stdin
 
 ---
 
-## MCP tools (`@1claw/mcp`) — your primary interface (27+ tools)
+## MCP tools (`@1claw/mcp`) — your primary interface (162 tools)
 
 These are **your** tools. Use them directly — don't tell the human to run CLI commands for operations you can do here. The table below lists the most common tools; see the full list in the [MCP README](https://www.npmjs.com/package/@1claw/mcp).
 
